@@ -2,11 +2,13 @@
 const todoInput = document.querySelector(".todo-input");
 const todoButton = document.querySelector(".todo-button");
 const todoList = document.querySelector(".todo-list");
+const filterOption = document.querySelector(".filter-todo");
 
 //eventlistener
 
 todoButton.addEventListener('click', addTodo);
 todoList.addEventListener('click', deleteCheck);
+filterOption.addEventListener('change', filterTodo);
 
 
 
@@ -45,8 +47,7 @@ function addTodo(event){
 }
 
 function deleteCheck(e) {
-    console.log(e.target);
-    const item = e.target;
+    const item = e.target; //full element tag statement with class in it
     //Delete Todo
     if (item.classList[0] === "trash-btn") { //classlist[0] means the first class of the element button, which is trashbtn
         const todo = item.parentElement;
@@ -60,6 +61,36 @@ function deleteCheck(e) {
     //Check Todo
     if (item.classList[0] === "complete-btn") {
          const todo = item.parentElement;
-         todo.classList.toggle('completed');
-    }
+         todo.classList.toggle('completed'); //adds a completed class to that particular div    
+    
+        }
 }   
+
+function filterTodo(e) {
+    const todos = todoList.childNodes;
+    todos.forEach(function (todo) { 
+        const mStyle = todo.style;  
+        if(mStyle != undefined && mStyle != null){
+            switch (e.target.value) {
+                case "all":
+                    mStyle.display = "flex";
+                    break;
+                case "completed":
+                    if (todo.classList.contains('completed')) {
+                        mStyle.display = 'flex';
+                    } else {
+                        mStyle.display = "none";
+                    }
+                    break;
+                case "uncompleted":
+                    if (todo.classList.contains('completed')){
+                        mStyle.display = 'none';
+                    }
+                    else{
+                        mStyle.display = "flex";
+                    }
+                    break;
+            }
+        }
+    })
+}
